@@ -1,121 +1,119 @@
-const questions=[
-{
-    question:"What is 2+2",
-    option1:"4",
-    option2:"5",
-    option3:"6",
-    option4:"1",
-    answer:"0",
-}
-,
-{
-    question:"What is 2+4",
-    option1:"4",
-    option2:"5",
-    option3:"6",
-    option4:"1",
-    answer:"2",
-}
-,
-{
-    question:"What is 2+2",
-    option1:"4",
-    option2:"5",
-    option3:"6",
-    option4:"1",
-    answer:"0",
-}
-,
-{
-    question:"What is 2+2",
-    option1:"4",
-    option2:"5",
-    option3:"6",
-    option4:"1",
-    answer:"0",
-}
-]
-let container=document.querySelector(".container")
-let contain;
-let option=document.querySelectorAll(".option");
 
-let number=0;
+const questions = [
+    {
+        question: "What is 2+2",
+        option1: "4",
+        option2: "5",
+        option3: "6",
+        option4: "1",
+        answer: "0",
+    },
+    {
+        question: "What is 2+4",
+        option1: "4",
+        option2: "5",
+        option3: "6",
+        option4: "1",
+        answer: "2",
+    },
+    {
+        question: "What is 3-2",
+        option1: "4",
+        option2: "5",
+        option3: "6",
+        option4: "1",
+        answer: "3",
+    },
+    {
+        question: "What is 3+2",
+        option1: "4",
+        option2: "5",
+        option3: "6",
+        option4: "1",
+        answer: "1",
+    }
+];
 
-const loaddata=()=>{
-contain=
-`
-<section class="header">Welcome to quiz app</section>
-<section class="wrapper">
-        <section class="question">${questions[number].question}</section>
-        <section class="options">
-            <li class="option" id="0">${questions[number].option1}</li>
-            <li class="option" id="1">${questions[number].option2}</li>
-            <li class="option" id="2">${questions[number].option3}</li>
-            <li class="option" id="3">${questions[number].option4}</li>
+let container = document.querySelector(".container");
+let number = 0;
+let correct=0;
+let wrong=0;
+let option;
+let next = document.querySelector(".next")
+let answergiven;
+
+const loaddata = () => {
+     answergiven=false;
+    let selected=false;
+    let contain = `
+        <section class="header">Welcome to quiz app</section>
+        <section class="wrapper">
+            <section class="question">${questions[number].question}</section>
+            <section class="options">
+                <li class="option" id="0">${questions[number].option1}</li>
+                <li class="option" id="1">${questions[number].option2}</li>
+                <li class="option" id="2">${questions[number].option3}</li>
+                <li class="option" id="3">${questions[number].option4}</li>
+            </section>
         </section>
-    </section>
-    <button class="next"></button>
-    `
+        <button class="next">Next</button>
+    `;
 
-    container.innerHTML=contain;
-    
-    option.forEach((opt)=>{
-        opt.addEventListener("click",()=>{
-            answer=opt.id;
-            console.log(answer);
-            if(answer===questions[0].answer){
-                opt.classList.add("correct");
-                button.innerHTML="next";
-                button.style.display="block";
+    container.innerHTML = contain;
+    option=document.querySelectorAll(".option");
+    console.log(option);
+
+    option.forEach((options)=>{
+
+        options.addEventListener("click",(e)=>{
+            answergiven=true;
+            const given=e.target.id;
+            if(given===questions[number].answer && selected===false){
+                console.log("correct")
+                e.target.classList.add("correct")
+                options.classList.add("answered");
+                number=number++;
+                correct++;
+                selected=true;
             }
-            else if(answer!==questions[0].answer){
-                opt.classList.add("incorrect")
-                option[questions[number].answer].classList.add("correct")
-                button.innerHTML="play again";
-                button.style.display="block"
+            else if(selected===false){
+                console.log("incorrect")
+                e.target.classList.add("incorrect")
+                wrong++;
+                selected=true
             }
         })
-        })
-    
+    })
 }
+
 
 loaddata();
 
 
-option=document.querySelectorAll(".option");
-let button= document.querySelector(".next");
+console.log(option);
 
-button.addEventListener("click",(e)=>{
-    if(e.target.innerHTML==="next"){
-        console.log("correct")
-        console.log(number)
-        number=number+1;
-        console.log(number)
-        loaddata()
+
+
+const nextQuestion = () => {
+    number++;
+    if (number < questions.length) {
+        loaddata();
+    } else {
+        container.innerHTML =
+         `
+         <div>
+        <p>End of the quiz</p>
+        <p>Score:
+        correct:${correct}
+        incorrect:${wrong}
+        </p>
+        </div>
+           ` ;
     }
-    if(e.target.innerHTML!=="next"){
-        console.log("incorrect")
+}
+
+container.addEventListener("click", (event) => {
+    if (event.target.classList.contains("next") && answergiven===true ) {
+        nextQuestion();
     }
-
-})
-
-option.forEach((opt)=>{
-opt.addEventListener("click",()=>{
-    answer=opt.id;
-    console.log(answer);
-    if(answer===questions[0].answer){
-        opt.classList.add("correct");
-        button.innerHTML="next";
-        button.style.display="block";
-    }
-    else if(answer!==questions[0].answer){
-        opt.classList.add("incorrect")
-        option[questions[number].answer].classList.add("correct")
-        button.innerHTML="play again";
-        button.style.display="block"
-    }
-})
-})
-
-
-
+});
